@@ -2,7 +2,9 @@ package com.devsuperior.dsmeta.controllers;
 
 import java.util.List;
 
+import com.devsuperior.dsmeta.dto.SaleReportDTO;
 import com.devsuperior.dsmeta.dto.SaleSummaryDTO;
+import org.springdoc.core.PropertyResolverUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,9 @@ public class SaleController {
 
 	@Autowired
 	private SaleService service;
-	
+    @Autowired
+    private PropertyResolverUtils propertyResolverUtils;
+
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<SaleMinDTO> findById(@PathVariable Long id) {
@@ -31,13 +35,14 @@ public class SaleController {
 	}
 
 	@GetMapping(value = "/report")
-	public ResponseEntity<List<ReportProjection>> getReport(
+	public ResponseEntity<List<SaleReportDTO>> getReport(
 			@RequestParam(value = "minDate", defaultValue = "") String minDate,
 			@RequestParam(value = "maxDate", defaultValue = "") String maxDate,
 			@RequestParam(value = "name", defaultValue = "") String name) {
 
-		// TODO
-		return null;
+		List<SaleReportDTO> result = service.searchReport(minDate, maxDate, name);
+
+		return ResponseEntity.ok(result);
 	}
 
 
